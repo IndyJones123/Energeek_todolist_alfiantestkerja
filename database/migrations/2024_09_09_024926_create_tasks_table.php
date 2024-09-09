@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreign('created_by')->references( coloumns: 'id')->on( table: 'users');
             $table->unsignedBigInteger('updated_by');
             $table->foreign('updated_by')->references( coloumns: 'id')->on( table: 'users');
-            $table->unsignedBigInteger('deleted_by');
+            $table->unsignedBigInteger('deleted_by')->nullable(); // Allow null values
             $table->foreign('deleted_by')->references( coloumns: 'id')->on( table: 'users');
             $table->softDeletes(); 
             $table->timestamps();

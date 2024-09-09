@@ -13,16 +13,11 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
-            $table->string('username')->unique();
+            $table->string('name');
+            $table->string('username')->unique()->nullable();
             $table->string('email')->unique();
+            $table->string('password');
 
-            $table->unsignedBigInteger('created_by');
-            $table->foreign('created_by')->references( coloumns: 'id')->on( table: 'users');
-            $table->unsignedBigInteger('updated_by');
-            $table->foreign('updated_by')->references( coloumns: 'id')->on( table: 'users');
-            $table->unsignedBigInteger('deleted_by');
-            $table->foreign('deleted_by')->references( coloumns: 'id')->on( table: 'users');
             $table->softDeletes(); 
             $table->timestamps();
             
