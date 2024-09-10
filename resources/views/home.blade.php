@@ -4,8 +4,13 @@
 
 @section('content')
     <div class="flex flex-col p-10 gap-5 ml-5 mr-5">
-        <div class="flex justify-center">
-            <img class="w-full md:w-1/4 max-w-xs" src="{{asset('energeeklogo.png')}}" alt="">
+        <div class="flex flex-row justify-center">
+            <div class="w-1/4"></div>
+            <img class="w-full md:w-1/4" src="{{asset('energeeklogo.png')}}" alt="">
+            <div class=" w-1/4 flex justify-end items-end text-end">
+                <a class="flex text-center border-2 border-[#E4E6EF] rounded-lg w-1/2 p-5 " href="/admin/login">CMS System</a>
+            </div>
+            
         </div>
        
         <div class="flex flex-col md:flex-row gap-5 bg-[#FFFFFF] p-5 md:p-10 rounded-xl">
@@ -84,7 +89,12 @@
             const modalTitle = document.getElementById('modalTitle');
             const modalMessage = document.getElementById('modalMessage');
             const closeModalButton = document.getElementById('closeModal');
-            
+
+            // Disable button on click
+            submitButton.addEventListener('click', function () {
+                submitButton.disabled = true;
+                submitButton.innerHTML = 'Loading...';
+            });
 
             function createTaskCard() {
                 const taskCard = document.createElement('div');
@@ -146,6 +156,9 @@
                     showModal('Berhasil', 'To do berhasil disimpan');
                 } catch (error) {
                     showModal('Gagal', 'To do gagal disimpan');
+                } finally {
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = 'Simpan';
                 }
             });
 
@@ -172,7 +185,6 @@
                     location.reload();
                 }, 2000);
             }
-
 
             closeModalButton.addEventListener('click', function () {
                 modalAlert.classList.add('hidden');
