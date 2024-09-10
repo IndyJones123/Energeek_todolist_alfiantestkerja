@@ -1,14 +1,14 @@
 @extends('layouts.app')
 
-@section('title', 'Home Page')
+@section('title', 'To Do List - Energeek')
 
 @section('content')
     <div class="flex flex-col p-10 gap-5 ml-5 mr-5">
         <div class="flex flex-row justify-center">
-            <div class="w-1/4"></div>
+            <div class="hidden md:block w-1/4"></div>
             <img class="w-full md:w-1/4" src="{{asset('energeeklogo.png')}}" alt="">
-            <div class=" w-1/4 flex justify-end items-end text-end">
-                <a class="flex text-center border-2 border-[#E4E6EF] rounded-lg w-1/2 p-5 " href="/admin/login">CMS System</a>
+            <div class=" w-1/4 flex justify-end items-end text-center">
+                <a class="flex text-center border-2 border-[#E4E6EF] rounded-lg w-1/2 p-5 items-center flex-row gap-2" href="/admin/login">CMS System</a>
             </div>
             
         </div>
