@@ -6,10 +6,10 @@ This Project Is Priority To Asses Job In PT Energeek Surabaya Using Laravel 11 ,
 
 ## Laravel Dependecies Instalation
 
-To install dependecies, run the following command
+To install dependecies, run the following command. Dont forget to check if you are in the right directory.
 
 ```bash
-  composer require Laravel
+  composer install
 ```
 
 ## NPM Module Instalation
@@ -22,23 +22,27 @@ To install dependecies, run the following command
 
 ## Setting Database
 
-Download .env that i have sent in email. and change the database local into your computer or u can just uncomment my Supabase Key if u willing so.
+Download .env that i have sent in email. and change the database local into your computer
 
 Dont Forget To Paste in Project Root
 
-if u want to use it in your local try this command to migrate the database using ORM that i already Built
+Run this command to migrate the database using ORM that i already Built using postgreSQL
 
 ```bash
   php artisan migrate
 ```
 
-## Make Admin User For Filament
+## Make Admin Account For Filament
+
+Run this command to add new admin account & fill the data.
 
 ```bash
 php artisan make:filament-user
 ```
 
 ## Launch Seeder
+
+Run this command to insert data category from seeder
 
 ```bash
 php artisan db:seed --class=CategorySeeder
@@ -60,8 +64,11 @@ The Style Might Not Appear So Do the following command since iam using tailwind
 
 ## Running Test
 
+Run This Code in new Terminal to run Unit Testing That I have been built. i also documented the rest api in postman.
+here is the link : https://documenter.getpostman.com/view/34782433/2sAXjSz8si
+
 ```bash
-   php artisan test --filter RegisterTest
+   php artisan test
 ```
 
 ## Tech Stack
