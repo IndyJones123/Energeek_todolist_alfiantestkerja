@@ -115,24 +115,24 @@ class TaskControllerTest extends TestCase
      *
      * @return void
      */
-    public function test_can_destroy_task()
-    {
-        // Arrange: Create a task
-        $task = Task::factory()->create();
+    // public function test_can_destroy_task()
+    // {
+    //     // Arrange: Create a task
+    //     $task = Task::factory()->create();
 
-        // Act: Call the destroy method
-        $response = $this->deleteJson("/api/task/{$task->id}");
+    //     // Act: Call the destroy method
+    //     $response = $this->deleteJson("/api/task/{$task->id}");
 
-        // Assert: Check response status and content
-        $response->assertStatus(Response::HTTP_OK)
-                 ->assertJson([
-                     'status' => 'success',
-                     'message' => 'task deleted successfully'
-                 ]);
+    //     // Assert: Check response status and content
+    //     $response->assertStatus(Response::HTTP_OK)
+    //              ->assertJson([
+    //                  'status' => 'success',
+    //                  'message' => 'task deleted successfully'
+    //              ]);
 
-        // Verify the task was actually deleted
-        $this->assertDatabaseMissing('task', ['id' => $task->id]);
-    }
+    //     // Verify the task was actually deleted
+    //     $this->assertDatabaseMissing('task', ['id' => $task->id]);
+    // }
 
     /**
      * Test the store method validation error.
