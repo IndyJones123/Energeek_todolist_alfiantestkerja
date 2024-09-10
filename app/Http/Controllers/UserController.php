@@ -2,39 +2,33 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
-use App\Models\category;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CategoryController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function home()
-    {
-        $categories = category::all();
-        return view('home', compact('categories'));
-    }
-
     public function index()
     {
         try {
-            // Fetch all task
-            $category = category::all();
+            // Fetch all Users
+            $users = User::all();
 
-            if ($category->isEmpty()) {
+            if ($users->isEmpty()) {
                 return response()->json([
                     'status' => 'success',
-                    'message' => 'No category found',
+                    'message' => 'No users found',
                     'data' => []
                 ], 200);
             }
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'task retrieved successfully',
-                'data' => $category
+                'message' => 'Users retrieved successfully',
+                'data' => $users
             ], 200);
         } catch (\Exception $e) {
             // Handle any errors and return a 400 response
@@ -45,6 +39,7 @@ class CategoryController extends Controller
             ], 400);
         }
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -63,22 +58,24 @@ class CategoryController extends Controller
             // Validate the request data
             $validatedData = $request->validate([
                 'name' => 'required|string|max:255',
-                'updated_by' => 'required|integer',
-                'created_by' => 'required|integer',
+                'email' => 'required|email|unique:users,email',
+                'username' => 'required|string|max:255|unique:users,username',
+                'password' => 'required|string|min:6'
             ]);
 
             // Create a new user with the validated data
-            $category = category::create([
+            $user = User::create([
                 'name' => $validatedData['name'],
-                'updated_by' => $validatedData['updated_by'],
-                'created_by' => $validatedData['created_by'],
+                'email' => $validatedData['email'],
+                'username' => $validatedData['username'],
+                'password' => bcrypt($validatedData['password']), // Hash the password
             ]);
 
             // Return success response
             return response()->json([
                 'status' => 'success',
-                'message' => 'category created successfully',
-                'data' => $category
+                'message' => 'User created successfully',
+                'data' => $user
             ], 201); // 201 Created status
 
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -99,27 +96,29 @@ class CategoryController extends Controller
         }
     }
 
+
+
     /**
      * Display the specified resource.
      */
     public function show(string $id)
     {
-       try {
+        try {
             // Fetch a single user by its ID
-            $category = category::find($id);
+            $user = User::find($id);
 
-            if ($category) {
-                // Return success response with task data
+            if ($user) {
+                // Return success response with user data
                 return response()->json([
                     'status' => 'success',
-                    'message' => 'task is found',
-                    'data' => $category
+                    'message' => 'User is found',
+                    'data' => $user
                 ], 200); // 200 OK status
             } else {
-                // Return error response if task not found
+                // Return error response if user not found
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'category not found'
+                    'message' => 'User not found'
                 ], 404); // 404 Not Found status
             }
 
@@ -132,7 +131,6 @@ class CategoryController extends Controller
             ], 500); // 500 Internal Server Error status
         }
     }
-
 
     /**
      * Show the form for editing the specified resource.
@@ -150,14 +148,17 @@ class CategoryController extends Controller
         // Validate the request data
         $validatedData = $request->validate([
             'name' => 'nullable|string|max:255',
+            'email' => 'nullable|email|unique:users,email,' . $id,
+            'username' => 'nullable|string|max:255|unique:users,username,' . $id,
+            'password' => 'nullable|string|min:6'
         ]);
 
         try {
             // Find the user by ID
-            $category = category::find($id);
+            $user = User::find($id);
 
             // Check if user exists
-            if (!$category) {
+            if (!$user) {
                 // Return error response if user not found
                 return response()->json([
                     'status' => 'error',
@@ -166,15 +167,20 @@ class CategoryController extends Controller
             }
 
             // Update the user with validated data
-            $category->fill($validatedData);
+            $user->fill($validatedData);
 
-            $category->save();
+            // Only hash the password if it's provided
+            if (isset($validatedData['password'])) {
+                $user->password = bcrypt($validatedData['password']);
+            }
+
+            $user->save();
 
             // Return success response
             return response()->json([
                 'status' => 'success',
                 'message' => 'User updated successfully',
-                'data' => $category
+                'data' => $user
             ], 200); // 200 OK status
 
         } catch (\Exception $e) {
@@ -186,6 +192,9 @@ class CategoryController extends Controller
             ], 500); // 500 Internal Server Error status
         }
     }
+
+
+
 
     /**
      * Remove the specified resource from storage.
@@ -193,25 +202,25 @@ class CategoryController extends Controller
     public function destroy(string $id)
     {
         try {
-            // Find the cate$category by ID
-            $category = category::find($id);
+            // Find the user by ID
+            $user = User::find($id);
 
-            // Check if cate$category exists
-            if (!$category) {
-                // Return error response if cate$category not found
+            // Check if user exists
+            if (!$user) {
+                // Return error response if user not found
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'category not found'
+                    'message' => 'User not found'
                 ], 404); // 404 Not Found status
             }
 
-            // Delete the cate$category
-            $category->delete();
+            // Delete the user
+            $user->delete();
 
             // Return success response
             return response()->json([
                 'status' => 'success',
-                'message' => 'cate$category deleted successfully'
+                'message' => 'User deleted successfully'
             ], 200); // 200 OK status
 
         } catch (\Exception $e) {
@@ -223,4 +232,5 @@ class CategoryController extends Controller
             ], 500); // 500 Internal Server Error status
         }
     }
+
 }
